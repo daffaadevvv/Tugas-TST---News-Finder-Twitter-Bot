@@ -99,28 +99,17 @@ def indexnat():
     return jsonify(results)
 
 
-@app.route('/resources/news/dalam', methods=['GET'])
-def indexn():
+@app.route('/newsfeed/dalamnegeri/<keywords>', methods=['GET'])
+def indexn(keywords):
     
-    # List of RSS feeds that we will fetch and combine
-    # newsnaturls = {
-    #     'republikautama':   'https://www.republika.co.id/rss',
-    #     'bbcindo':          'http://feeds.bbci.co.uk/indonesia/rss.xml',
-    #     'okezone':          'https://sindikasi.okezone.com/index.php/okezone/RSS2.0',
-    #     'detiknews':        'http://rss.detik.com/index.php/detikcom',
-    #     'suara':            'https://www.suara.com/rss',
-    #     'antaranews':       'https://www.antaranews.com/rss/news.xml'
-    # }
-    
-    # Iterate over the feed urls
-    
-        # Call getHeadlines() and combine the returned headlines with allheadlines
     print('data1')
     data = getHeadlines('https://www.republika.co.id/rss')
     print('data2')
     
-    phrase = 'patimban'
+    phrase = keywords
     phrase = phrase.lower()
+
+    print(phrase)
 
     for headline in data:
         print(headline)
@@ -133,8 +122,6 @@ def indexn():
             return jsonify(**result)
 
     return jsonify('your keywords is not found')
-
-
 
 if __name__ == '__main__':
     app.run(debug = True)
