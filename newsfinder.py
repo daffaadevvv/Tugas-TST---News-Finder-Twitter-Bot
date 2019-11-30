@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, redirect
 import feedparser
-import re
 
 app = Flask(__name__)
 
@@ -133,6 +132,7 @@ def indexn():
             print(result)
             return jsonify(**result)
 
+    return jsonify('your keywords is not found')
 
 
 
