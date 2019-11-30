@@ -1,6 +1,7 @@
-from flask import Flask, Response, redirect, request, jsonify
+from flask import Flask
 import json
 import twitter
+import requests
 
 CONSUMER_KEY = 'NtSd91Sg1FTL89OWWG8AKZtbb'
 CONSUMER_SECRET = 'vNO3U5p8LwYd5yLzNobM7Pv9pND58mUyRZMmSszq982OT5llTu'
@@ -36,44 +37,32 @@ def mentionCheck():
     return mention
 
 def mentionUser(mention = mentionCheck()):
-    response = {
-        'code': 200,
-        'message': 'Request Success',
-        'data' : mention[0].user.screen_name
-    }
-
-    return response
+    return mention[0].user.screen_name
 
 def mentionMessage(mention = mentionCheck()):
     message_string = mention[0].text.split( )
-    response = {
+
+    return mentionRemove(message_string)
+
+def postTweet(link, username = mentionUser()):
+    print(link)
+    text = '@' + username + ' ' + link
+    print(text)
+    api.PostUpdate(status=text)
+    print('sampe sini gan')
+    return text
+
+def callNews(result = mentionMessage()):
+    req_link = requests.get('http://127.0.0.1:5000/news/dalam/' + result).json()
+    
+    link = req_link['link']
+    
+    tweetMessage = postTweet(link)
+
+    jsonResponse = {
         'code': 200,
-        'message': 'Request Success',
-        'data' : (' '.join(mentionRemove(message_string)))
+        'message': 'request success',
+        'data': tweetMessage
     }
-
-    return response
-
-def response_api(data):
-    return jsonify(**data)
-
-@app.route('/twitter/mention/message', methods=['GET'])
-def message():
-    try:
-        data = mentionMessage()
-        return response_api(data)
-    except Exception as e:
-        return e
-
-@app.route('/twitter/mention/user', methods=['GET'])
-def user():
-    try:
-        data = mentionUser()
-        print(data)
-        return response_api(data)
-    except Exception as e:
-        return e
-
-
-if __name__ == "__main__":
-    app.run()
+    
+    return jsonResponse
