@@ -79,13 +79,13 @@ def indexnat():
     }
     
     # Iterate over the feed urls
-    for key,url in newsnaturls.items():
-        # Call getHeadlines() and combine the returned headlines with allheadlines
-        allnatheadlines.extend( getHeadlines( url ) )
+    # for key,url in newsnaturls.items():
+    #     # Call getHeadlines() and combine the returned headlines with allheadlines
+    #     allnatheadlines.extend( getHeadlines( url ) )
     
     phrase = 'patimban'
     phrase = phrase.lower()
-    index = 0
+    # index = 0
     results = []
 
     for natheadline in allnatheadlines:
@@ -100,8 +100,8 @@ def indexnat():
     return jsonify(results)
 
 
-@app.route('/resources/news/dalam', methods=['GET'])
-def indexn():
+@app.route('/resources/news/dalam/<keyword>', methods=['GET'])
+def indexn(keyword):
     
     # List of RSS feeds that we will fetch and combine
     # newsnaturls = {
@@ -120,8 +120,15 @@ def indexn():
     data = getHeadlines('https://www.republika.co.id/rss')
     print('data2')
     
-    phrase = 'patimban'
+    phrase = keyword
     phrase = phrase.lower()
+
+    print(phrase)
+
+    result = {
+        'phrase': phrase,
+        'link': 'Link tidak ditemukan'
+    }
 
     for headline in data:
         print(headline)
@@ -131,10 +138,9 @@ def indexn():
                 'link': headline
             }
             print(result)
-            return jsonify(**result)
+            break
 
-
-
+    return jsonify(**result)
 
 if __name__ == '__main__':
     app.run(debug = True)
