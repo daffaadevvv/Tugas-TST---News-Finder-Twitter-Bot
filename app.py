@@ -1,4 +1,4 @@
-from flask import Flask, Response, redirect, request, jsonify
+from flask import Flask, jsonify
 import json
 import twitterApi
 import newsFinder
