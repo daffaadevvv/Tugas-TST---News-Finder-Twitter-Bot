@@ -17,7 +17,7 @@ def dalamNegeri(keyword):
     
     result = {
         'phrase': phrase,
-        'link': 'Link tidak ditemukan'
+        'link': 'Link tidak ditemukan, coba keyword lain'
     }
 
     for link in listLink:

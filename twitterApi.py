@@ -36,20 +36,26 @@ def mentionCheck():
 
     return mention
 
+def mentionID(mention = mentionCheck()):
+    print (mention[0].user.id)
+    return mention[0].user.id
+
 def mentionUser(mention = mentionCheck()):
+    print(mention[0].user.screen_name)
     return mention[0].user.screen_name
 
 def mentionMessage(mention = mentionCheck()):
     message_string = mention[0].text.split( )
+    query = mentionRemove(message_string)
+    return query[0]
 
-    return mentionRemove(message_string)
-
-def postTweet(link, username = mentionUser()):
+def postTweet(link):
     print(link)
-    text = '@' + username + ' ' + link
-    print(text)
-    api.PostUpdate(status=text)
-    print('sampe sini gan')
+    
+    text = '@' + mentionUser() + ' ' + link
+
+    api.PostUpdate(status=text, in_reply_to_status_id=mentionID())
+    
     return text
 
 def callNews(result = mentionMessage()):
@@ -62,7 +68,49 @@ def callNews(result = mentionMessage()):
     jsonResponse = {
         'code': 200,
         'message': 'request success',
-        'data': tweetMessage
+        'data': tweetMessage,
+        'to reply query': mentionMessage(),
+        'in reply to': mentionUser(),
+        'with ID': mentionID()
     }
     
+    return jsonResponse
+
+
+# DEBUG FUNCTION
+
+def jsonMessage(mention = mentionCheck()):
+    message_string = mention[0].text.split( )
+
+    jsonResponse = {
+        'code': 200,
+        'message': 'request success',
+        'data': mentionRemove(message_string)[0]
+    }
+    
+    return jsonResponse
+
+def jsonUser(mention = mentionCheck()):
+    jsonResponse = {
+        'code': 200,
+        'message': 'request success',
+        'data': (mention[0].user.screen_name)
+    }
+    return jsonResponse
+
+def jsonTweet():
+    api.PostUpdates('BotTwitter Tes')
+    
+    jsonResponse = {
+        'data': 'sukses gan'
+    }
+
+    return jsonResponse
+
+def jsonID(mention = mentionCheck()):
+    jsonResponse = {
+        'code': 200,
+        'message': 'request success',
+        'data': mention[0].user.id
+    }
     return jsonResponse
