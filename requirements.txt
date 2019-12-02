@@ -9,3 +9,5 @@ oauthlib==3.1.0
 requests==2.22.0
 requests-oauthlib==1.2.0
 urllib3==1.25.6
+python-twitter
+feedparser
